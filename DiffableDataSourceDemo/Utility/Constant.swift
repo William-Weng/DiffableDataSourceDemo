@@ -23,6 +23,21 @@ extension Constant {
         case adventure
         case romance
         case animation
+        
+        /// 主分類標題
+        /// - Returns: String
+        func title() -> String {
+            
+            let title: String
+            
+            switch self {
+            case .adventure: title = "冒險"
+            case .romance: title = "浪漫"
+            case .animation: title = "動畫"
+            }
+            
+            return title
+        }
     }
     
     enum OutlineItem: Hashable {

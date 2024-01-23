@@ -171,7 +171,7 @@
         <scene sceneID="4YD-go-eYh">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="IYf-a2-HX1" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="電影" image="popcorn.fill" catalog="system" id="Igl-Hc-exB"/>
+                    <tabBarItem key="tabBarItem" title="電影" image="MovieTheater" id="Igl-Hc-exB"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="o88-QL-ISk">
                         <rect key="frame" x="0.0" y="48" width="414" height="44"/>
@@ -190,7 +190,7 @@
         <scene sceneID="Vjk-dC-Poh">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="85y-1h-hVj" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="列表" image="dice.fill" catalog="system" id="NeN-Rm-z5R"/>
+                    <tabBarItem key="tabBarItem" title="列表" image="VideoPlayer" id="NeN-Rm-z5R"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="QnP-yH-pE3">
                         <rect key="frame" x="0.0" y="48" width="414" height="44"/>
@@ -211,6 +211,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="qoF-2q-5Nh" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="j9H-lH-ppX">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="selectedImageTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -226,8 +227,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="dice.fill" catalog="system" width="128" height="116"/>
-        <image name="popcorn.fill" catalog="system" width="102" height="128"/>
+        <image name="MovieTheater" width="42.666667938232422" height="42.666667938232422"/>
+        <image name="VideoPlayer" width="42.666667938232422" height="42.666667938232422"/>
         <systemColor name="systemOrangeColor">
             <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

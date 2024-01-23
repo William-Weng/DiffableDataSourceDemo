@@ -22,10 +22,10 @@ extension UITableViewCell {
     ///   - text: [主要文字](https://zhuanlan.zhihu.com/p/572526799)
     ///   - secondaryText: [次要文字](https://www.jianshu.com/p/e8843595a794)
     ///   - image: [圖示](https://medium.com/@dragos.rotaru9/uitableviewcell-in-ios-14-ef19e877319f)
-    func _contentConfiguration(text: String?, secondaryText: String?, image: UIImage?) {
+    func _defaultContentConfiguration(text: String?, secondaryText: String?, image: UIImage?) {
         
         var config = defaultContentConfiguration()
-        
+                
         config.text = text
         config.secondaryText = secondaryText
         config.image = image
@@ -37,11 +37,11 @@ extension UITableViewCell {
 // MARK: - UICollectionViewListCell (function)
 extension UICollectionViewListCell {
     
-    /// [設定內建樣式 - iOS 14](https://www.appcoda.com.tw/ios-14-uicollectionview/)
+    /// [設定可折疊Cell的內建樣式 - iOS 14](https://www.appcoda.com.tw/ios-14-uicollectionview/)
     /// - Parameters:
-    func _contentConfiguration(text: String?, secondaryText: String?, image: UIImage?) {
+    func _defaultContentConfiguration(text: String?, secondaryText: String?, image: UIImage?) {
         
-        var config = self.defaultContentConfiguration()
+        var config = defaultContentConfiguration()
         
         config.text = text
         config.image = image
@@ -65,6 +65,21 @@ extension UICollectionLayoutListConfiguration {
         config.backgroundColor = backgroundColor
         
         return config
+    }
+}
+
+// MARK: - UICellAccessory.CustomViewConfiguration (function)
+extension UICellAccessory.CustomViewConfiguration {
+    
+    /// [Cell上的自訂Accessory](https://www.donnywals.com/how-to-add-a-custom-accessory-to-a-uicollectionviewlistcell/)
+    /// - Parameters:
+    ///   - customView: UIView
+    ///   - placement: UICellAccessory.Placement
+    ///   - tintColor: UIColor?
+    /// - Returns: UICellAccessory.CustomViewConfiguration
+    static func _build(customView: UIView, placement: UICellAccessory.Placement, tintColor: UIColor?) -> Self {
+        let customAccessory = Self(customView: customView, placement: placement, tintColor: tintColor)
+        return customAccessory
     }
 }
 

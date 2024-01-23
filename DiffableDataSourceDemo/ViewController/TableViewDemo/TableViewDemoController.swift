@@ -9,7 +9,7 @@ import UIKit
 import WWPrint
 import WWToast
 
-// MARK: - 電影列表
+// MARK: - 電影列表 (一般)
 final class TableViewDemoController: UIViewController {
     
     @IBOutlet weak var myTableView: UITableView!
@@ -30,7 +30,7 @@ final class TableViewDemoController: UIViewController {
 extension TableViewDemoController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let movie = seachMovie(with: indexPath) else { return }
+        guard let movie = searchMovie(for: indexPath) else { return }
         WWToast.shared.makeText(target: self, text: "\(movie.name) - \(movie.actor) - \(movie.year)", duration: .short)
     }
     
@@ -43,31 +43,13 @@ extension TableViewDemoController: UITableViewDelegate {
     }
 }
 
-// MARK: - UITableViewDataSource
-//extension TableViewDemoController: UITableViewDataSource {
-//
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return 10
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "MyTableViewCell", for: indexPath)
-//        let icon = UIImage(systemName: "heart.fill")?.withTintColor(.systemRed, renderingMode: .alwaysOriginal)
-//
-//        cell._contentConfiguration(text: "\(indexPath.row)", secondaryText: "\(indexPath.section)", image: icon)
-//
-//        return cell
-//    }
-//}
-
 // MARK: - UITableViewDiffableDataSource / NSDiffableDataSourceSnapshot
 private extension TableViewDemoController {
     
     /// [初始化](https://github.com/EwingYangs/awesome-open-gpt)
     func initSetting() {
         
-        let moviesInfo = movieInfoMaker()
+        let moviesInfo = Utility.shared.movieInfoMaker()
         let snapshot = sourceSnapshotMaker(moviesInfo: moviesInfo)
         
         myTableView.delegate = self
@@ -85,7 +67,7 @@ private extension TableViewDemoController {
         let dataSource = UITableViewDiffableDataSource<Constant.Section, Model.Movie>(tableView: myTableView) { tableView, indexPath, itemIdentifier in
             return self.movieCellMaker(with: tableView, indexPath: indexPath, itemIdentifier: itemIdentifier)
         }
-                
+        
         return dataSource
     }
     
@@ -113,7 +95,7 @@ private extension TableViewDemoController {
     func deleteMovie(with indexPath: IndexPath, animatingDifferences: Bool = true) {
         
         guard var snapshot = Optional.some(dataSource.snapshot()),
-              let deleteItem = dataSource.itemIdentifier(for: indexPath)
+              let deleteItem = searchMovie(for: indexPath)
         else {
             return
         }
@@ -139,7 +121,7 @@ private extension TableViewDemoController {
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
     
-    /// 插入資料 (之前)
+    /// [插入資料 (之前)](https://stackoverflow.com/questions/57510622/how-to-move-uitableview-cells-while-using-uitableviewdiffabledatasource)
     /// - Parameters:
     ///   - movie: Movie
     ///   - indexPath: IndexPath
@@ -147,7 +129,7 @@ private extension TableViewDemoController {
     func insertMovie(_ movie: Model.Movie, before indexPath: IndexPath, animatingDifferences: Bool = true) {
         
         guard var snapshot = Optional.some(dataSource.snapshot()),
-              let beforeItem = dataSource.itemIdentifier(for: indexPath)
+              let beforeItem = searchMovie(for: indexPath)
         else {
             return
         }
@@ -164,7 +146,7 @@ private extension TableViewDemoController {
     func insertMovie(_ movie: Model.Movie, after indexPath: IndexPath, animatingDifferences: Bool = true) {
         
         guard var snapshot = Optional.some(dataSource.snapshot()),
-              let afterItem = dataSource.itemIdentifier(for: indexPath)
+              let afterItem = searchMovie(for: indexPath)
         else {
             return
         }
@@ -176,7 +158,7 @@ private extension TableViewDemoController {
     /// 搜尋資料
     /// - Parameter indexPath: IndexPath
     /// - Returns: Movie?
-    func seachMovie(with indexPath: IndexPath) -> Model.Movie? {
+    func searchMovie(for indexPath: IndexPath) -> Model.Movie? {
         let item = dataSource.itemIdentifier(for: indexPath)
         return item
     }
@@ -193,37 +175,6 @@ private extension TableViewDemoController {
 
 // MARK: - 小工具
 private extension TableViewDemoController {
-    
-    /// 產生假資料
-    /// - Returns: [MovieInfo]
-    func movieInfoMaker() -> [Constant.MovieInfo] {
-        
-        let adventureMovies = [
-            Model.Movie(name: "蜘蛛人:返校日", actor: "湯姆", year: 2017),
-            Model.Movie(name: "蜘蛛人:驚奇再起", actor: "安德魯", year: 2012),
-            Model.Movie(name: "蜘蛛人", actor: "陶比", year: 2002)
-        ]
-        
-        let romanceMovies = [
-            Model.Movie(name: "生命中的美好缺憾", actor: "雪琳", year: 2014),
-            Model.Movie(name: "真愛每一天", actor: "瑞秋", year: 2013),
-            Model.Movie(name: "手札情緣", actor: "雷恩", year: 2004)
-        ]
-        
-        let animationMovies = [
-            Model.Movie(name: "龍貓", actor: "宮崎駿", year: 1988),
-            Model.Movie(name: "地海戰記", actor: "宮崎吾朗", year: 2006),
-            Model.Movie(name: "鈴芽之旅", actor: "新海誠", year: 2022)
-        ]
-        
-        let moviesInfo: [Constant.MovieInfo] = [
-            (section: .adventure, items: adventureMovies),
-            (section: .romance, items: romanceMovies),
-            (section: .animation, items: animationMovies),
-        ]
-        
-        return moviesInfo
-    }
     
     /// 電影假資料
     /// - Returns: Movie
@@ -247,7 +198,7 @@ private extension TableViewDemoController {
             return
         }
         
-        viewController.movie = seachMovie(with: indexPath)
+        viewController.movie = searchMovie(for: indexPath)
     }
     
     /// 左側滑動按鈕功能
@@ -284,7 +235,7 @@ private extension TableViewDemoController {
         
         let updateAction = UIContextualAction._build(with: "更新", color: #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)) {
             
-            guard let oldMovie = self.dataSource.itemIdentifier(for: indexPath) else { return }
+            guard let oldMovie = self.searchMovie(for: indexPath) else { return }
             
             let movie = Model.Movie(name: "\(Date())", actor: oldMovie.actor, year: oldMovie.year)
             self.updateMovie(movie: movie, with: indexPath)
@@ -304,7 +255,7 @@ private extension TableViewDemoController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyTableViewCell", for: indexPath)
         let icon = UIImage(systemName: "\(indexPath.row + 1).circle.fill")?.withTintColor(.systemRed, renderingMode: .alwaysOriginal)
         
-        cell._contentConfiguration(text: itemIdentifier.name, secondaryText: itemIdentifier.actor, image: icon)
+        cell._defaultContentConfiguration(text: itemIdentifier.name, secondaryText: itemIdentifier.actor, image: icon)
         
         return cell
     }

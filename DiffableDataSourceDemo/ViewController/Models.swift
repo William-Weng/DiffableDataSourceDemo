@@ -26,7 +26,7 @@ final class Model: NSObject {
     
     /// 主分類
     struct Parent: Hashable {
-        let item: String
+        let item: Constant.Section
         let childItems: [Child]
     }
     
